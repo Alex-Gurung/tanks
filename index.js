@@ -30,6 +30,9 @@ io.on('connection', function(socket){
       socket.emit('currentplayers', getCurrentPlayers());
       socket.broadcast.emit('newplayer', socket.player)
   })
+  socket.on('user update', function(data) {
+      socket.broadcast.emit('user update', data)
+  })
   socket.on('coords', function(data) {
         //   console.log(io.sockets.connected[socket.id].player.x)
         socket.player = {

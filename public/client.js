@@ -9,6 +9,14 @@ Client.sendData = function(data) {
     Client.socket.emit('coords', data)
 }
 
+Client.sendUpdate = function(data) {
+    Client.socket.emit('user update', data)
+}
+
+Client.socket.on('user update', function(data) {
+    Game.updateMovement(data.id, data.key)
+})
+
 Client.socket.on('newplayer',function(player){
     Game.addNewPlayer(player.id,player.x,player.y, player.angle);
 });
