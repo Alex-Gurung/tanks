@@ -4,13 +4,28 @@
         <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!--<link href="css/style.css" rel="stylesheet">-->
+        <link href="./style.css" rel="stylesheet">
     </head>
     <body>
         <div id="game"></div>
+    
+<script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBqhyIu4W8wzX4w2OVMGJDM0mLJxEMxj3o",
+    authDomain: "tanks-79702.firebaseapp.com",
+    databaseURL: "https://tanks-79702.firebaseio.com",
+    projectId: "tanks-79702",
+    storageBucket: "",
+    messagingSenderId: "263405608834"
+  };
+  firebase.initializeApp(config);
+</script>
+    <script src="./jquery.min.js"></script>
     <script src="./socket.min.js"></script>
     <script src="./phaser.js"></script>
-
+    <script src="./getdimensions.js"></script>
     <script src="./game.js"></script>
     <script src="./client.js"></script>
     </body>

@@ -1,7 +1,7 @@
 var Game = {};
 Game.playerMap = {};
 Game.speedMap = {};
-var game = new Phaser.Game(800, 600, Phaser.AUTO, document.getElementById('game'));
+var game = new Phaser.Game(WIDTH, HEIGHT, Phaser.AUTO, document.getElementById('game'));
 
 
 
@@ -13,6 +13,7 @@ Game.preload = function () {
     // game.load.tilemap('map', 'tilemap.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('sprite', 'tank.png');
     game.load.image('tile', 'tile.png')
+    game.load.image('bullet', 'bullet.png');
 }
 var land;
 var cursors;
@@ -21,7 +22,7 @@ Game.create = function () {
     // var map = game.add.tilemap('map')
     game.world.setBounds(-1000, -1000, 2000, 2000);
     game.physics.startSystem(Phaser.Physics.ARCADE);
-    land = game.add.tileSprite(0, 0, 800, 600, 'tile');
+    land = game.add.tileSprite(0, 0, WIDTH, HEIGHT, 'tile'); //width, height -> 800, 600
     land.fixedToCamera = true;
     game.stage.backgroundColor = '#7a7a7a';
     cursors = game.input.keyboard.createCursorKeys();
