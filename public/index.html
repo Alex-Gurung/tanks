@@ -4,10 +4,38 @@
         <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
         <link href="./style.css" rel="stylesheet">
     </head>
     <body>
-        <div id="game"></div>
+        <!-- The overlay -->
+<div id="myNav" class="overlay">
+
+  <!-- Button to close the overlay navigation -->
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+  <!-- Overlay content -->
+  <div class="overlay-content">
+      <div class="options">
+    <h1>Sign Up/Log in</h1>
+    <div class="spacer"></div>
+        
+
+    <input id="email" type="" name="" placeholder="email">
+    <div class="spacer"></div>
+    <input id="password" type="" name="" placeholder="password">
+    <div class="spacer"></div>
+    <button type="" onclick="logSign()">Enter!</button>
+    <button type="" onclick="signOut()">Sign Out</button>
+    
+    </div>
+  </div>
+
+</div>
+
+<!-- Use any element to open/show the overlay navigation menu -->
+<div class="header"> <span onclick="openNav()">Login</span> <span id='user' onclick="openNav()">User: Unknown</span></div>
+<div id="game"></div>
     
 <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
 <script>
