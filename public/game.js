@@ -2,17 +2,28 @@ var Game = {};
 Game.playerMap = {};
 Game.turretMap = {};
 Game.speedMap = {};
+var flag;
+var flag_coords = {}
 var game = new Phaser.Game(WIDTH, HEIGHT, Phaser.AUTO, document.getElementById('game'));
 
 
+function checkOverlap(spriteA, spriteB) {
+    
+    var boundsA = spriteA.getBounds();
+    var boundsB = spriteB.getBounds();
+// console.log(boundsA)
+// console.log(boundsB)
+    return Phaser.Rectangle.intersects(boundsA, boundsB);
 
-Game.init = function () {
+}
+Game.init = function () {   
     game.stage.disableVisibilityChange = true;
 }
 
 Game.preload = function () {
     // game.load.tilemap('map', 'tilemap.json', null, Phaser.Tilemap.TILED_JSON);
-    game.load.image('sprite', 'tank.png');
+    game.load.image('sprite', 'assets/tank1.png');
+    game.load.image('flag', 'flag.png')
     game.load.image('tile', 'tile.png')
     game.load.image('bullet', 'bullet.png');
     game.load.atlas('tank', 'assets/tanks.png', 'assets/tanks.json');
@@ -22,9 +33,11 @@ Game.preload = function () {
     game.load.image('earth', 'assets/scorched_earth.png');
     game.load.spritesheet('kaboom', 'assets/explosion.png', 64, 64, 23);
     game.load.image('turret', 'assets/turret.png')
+    
 }
 var land;
 var cursors;
+var text;
 // var currentSpeed = 0;
 Game.create = function () {
     // var map = game.add.tilemap('map')
@@ -41,10 +54,15 @@ Game.create = function () {
 }
 Game.update = function () {
     // land.tilePosition.x += 2;
+    if (flag){
+        flag.destroy()
+    }   
+    flag = game.add.sprite(flag_coords.x, flag_coords.y, 'flag')
     var tank = Game.playerMap[Client.socket.io.engine.id];
     var turret = Game.turretMap[Client.socket.io.engine.id];
     var currentSpeed = Game.speedMap[Client.socket.io.engine.id];
     if (tank) {
+            // console.log()
     //     tank.anchor.setTo(0.5, 0.5);
     //     tank.animations.add('move', ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6'], 20, true);
     //     turret = game.add.sprite(0, 0, 'tank', 'turret');
@@ -119,6 +137,12 @@ Game.update = function () {
             //tank.angle+=180;
         }
 
+        if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
+            var obj = {email: 1};
+            ref.push(obj);   // Creates a new ref with a new "push key"
+            ref.set(obj);    // Overwrites the path
+            ref.update(obj); // Updates only the specified attributes 
+        }
         // if (currentSpeed > 0 || currentSpeed < 0)
         // {
             game.physics.arcade.velocityFromRotation(tank.rotation, currentSpeed, tank.body.velocity);
@@ -136,13 +160,28 @@ Game.update = function () {
         land.tilePosition.y = -game.camera.y;
         turret.x = tank.x;
         turret.y = tank.y;
+        
+        var phrase = 'Flag: ' + JSON.stringify(flag_coords) + "\nYou: " + tank.x + ", " + tank.y;
+        var style = { font: "bold 16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
+
+    //  The Text is positioned at 0, 100
+        if (text) {
+            text.destroy();
+        }
+        text = game.add.text(0, 0, phrase, style);
+        text.fixedToCamera = true;
+        text.setShadow(3, 3, 'rgba(0,0,0,0.5)', 2);
+        if(checkOverlap(tank, flag)){
+            // console.log('overlap')
+            // alert('what')
+        }
+        // game.debug.text('Flag: ' + JSON.stringify(flag_coords) + "\nYou: " + tank.x + ", " + tank.y);
         // console.log("x&y")
         // console.log(tank)
         // console.log(tank.y)
         // Client.sendData({x: tank.x, y: tank.y, angle: tank.angle});
     }
 }
-
 Game.showScores = function() {
     game.debug.text('Enemies: ' + 1 + ' / ' + 2, 32, 32);
 }
@@ -156,10 +195,13 @@ Game.updateMovement = function(id, key){
     if (other_tank) {
         // game.camera.follow(other_tank);
         // console.log('ta')
-        console.log(other_tank)
+        // console.log(other_tank)
         // console.log('nk')
         // console.log(Phaser.Physics.ARCADE)
         game.physics.arcade.enable([other_tank]);
+        if(other_tank) {
+            other_tank.body.bounce.setTo(1,1);
+        }
 
         // other_tank.body.drag.set(10);
         // other_tank.body.maxVelocity.setTo(400, 400);
@@ -244,6 +286,26 @@ Game.updatePlayer = function(id, x, y, angle) {
     // Game.playerMap[id].angle = angle;
     
 }
+Game.makeFlagCoords = function() {
+    var x_flag = getRandomArbitrary(0, 10);
+    var y_flag = getRandomArbitrary(0, 10);
+    console.log('in game making new coords')
+    Client.sendCoords(x_flag, y_flag);
+}
+Game.renderFlag = function(data) {
+    console.log('rendering flag')
+    if (flag){
+        flag.destroy()
+    }
+    flag_coords = {x: data.x, y: data.y}
+    flag = game.add.sprite(data.x, data.y, 'flag')
+}
 
 game.state.add('Game', Game);
 game.state.start('Game');
+
+
+
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}

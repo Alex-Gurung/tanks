@@ -1,6 +1,13 @@
 const WIDTH = $(window).width();
 const HEIGHT = $(window).height();
 const auth = firebase.auth();
+var database = firebase.database();
+var ref = firebase.database().ref('/data/');
+var second = firebase.database().ref('/data/' + 'a@gmail.com')
+second.on('value', function(snap) {
+    // alert(snap.val())
+    console.log(snap)
+})
 var email;
 auth.onAuthStateChanged(firebaseUser => {
     if(firebaseUser){
@@ -17,12 +24,12 @@ auth.onAuthStateChanged(firebaseUser => {
         console.log('not logged in')
     }
 })
-// $(function() {
-    // console.log('hey')
-    // const promise = auth.signInWithEmailAndPassword('aag1234@gmail.com', 'some_password');
-    // promise.catch(e => console.log(e.message))
-    // console.log('hi')
-// })
+$(function() {
+        // var obj = {someAttribute: true};
+        // ref.push(obj);   // Creates a new ref with a new "push key"
+        // ref.set(obj);    // Overwrites the path
+        // ref.update(obj); // Updates only the specified attributes 
+})
 /* Open when someone clicks on the span element */
 function openNav() {
     document.getElementById("myNav").style.width = "100%";

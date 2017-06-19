@@ -15,8 +15,15 @@ http.listen(process.env.PORT || 8080, function() {
 })
 
 var coord_data = {}
-
+var flag_coord = {x: 0, y: 0}
 io.on('connection', function(socket){
+    if (Object.keys(io.sockets.connected).length == 1) {
+        console.log('making new flag')
+        socket.emit('make new flag')
+    }
+    else{
+        socket.emit('render flag', flag_coord)
+    }
   console.log('someone connected')
   socket.on('newplayer', function() {
       console.log('new player')
@@ -30,6 +37,15 @@ io.on('connection', function(socket){
       socket.emit('currentplayers', getCurrentPlayers());
       socket.broadcast.emit('newplayer', socket.player)
   })
+
+  socket.on('flag coords', function(data) {
+      console.log('flag coords received ' + JSON.stringify(data))
+      flag_coord.x = data.x
+      flag_coord.y = data.y
+      socket.emit('render flag', flag_coord)
+      socket.broadcast.emit('render flag', flag_coord)
+  })
+
   socket.on('user update', function(data) {
       socket.broadcast.emit('user update', data)
   })

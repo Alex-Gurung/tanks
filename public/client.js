@@ -34,3 +34,17 @@ Client.socket.on('update user', function(user) {
 Client.socket.on('player locations', function(coord_data) {
     Game.resetPlayers();
 })
+
+
+Client.socket.on('make new flag', function() {
+    console.log('make new flag')
+    Game.makeFlagCoords();
+})
+
+Client.sendCoords = function(x, y) {
+    Client.socket.emit('flag coords', {x: x, y: y})
+}
+
+Client.socket.on('render flag', function(data) {
+    Game.renderFlag(data);
+})
